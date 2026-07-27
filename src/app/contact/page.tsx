@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import HoursLines from '@/components/HoursLines';
 
 export const metadata: Metadata = { title: 'Contact Us', description: 'Contact Encino Electrician. Call (818) 643-2345.' };
 
@@ -23,7 +24,7 @@ export default function ContactPage() {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Get a Free Quote in less than 24hrs</h2>
             <div className="mb-4"><h3 className="font-bold">Call</h3><a href="tel:+18186432345" className="text-2xl font-bold text-blue-600">(818) 643-2345</a></div>
             <div className="mb-4"><h3 className="font-bold">Email</h3><a href="mailto:info@encinoelectrician.com" className="text-blue-600">info@encinoelectrician.com</a></div>
-            <div><h3 className="font-bold">Hours</h3><p className="text-gray-600">Mon-Sun 8AM-6PM</p></div>
+            <div><h3 className="font-bold">Hours</h3><HoursLines className="text-gray-600" /></div>
           </div>
         </div>
       </section>
