@@ -1,7 +1,7 @@
 export interface BlogPost {
   slug: string;
   title: string;
-  date: string;
+  date: string; publishedAt: string;
   category: string;
   excerpt: string;
   image: string;
@@ -12,7 +12,7 @@ export const blogPosts: BlogPost[] = [
   {
     slug: 'emergency-electrician-in-encino-what-to-do-before-we-arrive',
     title: 'Emergency Electrician in Encino: What to Do Before We Arrive',
-    date: 'April 29, 2026',
+    date: 'April 29, 2026', publishedAt: '2026-04-29',
     category: 'Electrician',
     excerpt: 'Electrical emergencies can happen at any time—and when they do, they can be dangerous, stressful, and even life-threatening. Whether you\'re dealing with a sudden power outage, sparking outlets, or a burning smell coming from your panel, knowing what to do before your...',
     image: '/images/AdobeStock_225354028-400x250.jpeg',
@@ -31,10 +31,33 @@ export const blogPosts: BlogPost[] = [
   },
 ];
 
-export function getPostBySlug(slug: string): BlogPost | undefined {
-  return blogPosts.find((post) => post.slug === slug);
+
+/** Current date in America/Los_Angeles as YYYY-MM-DD. */
+function getTodayLA(): string {
+  return new Date().toLocaleDateString('en-CA', { timeZone: 'America/Los_Angeles' });
 }
 
+/**
+ * Only posts whose publishedAt is <= today (America/Los_Angeles).
+ * Use for all public-facing listings and lookups so scheduled posts
+ * stay invisible until their date.
+ */
+export function getPublishedPosts(): BlogPost[] {
+  const today = getTodayLA();
+  return blogPosts.filter(post => post.publishedAt <= today);
+}
+
+/** Published post by slug — undefined if not found or not yet published. */
+export function getPostBySlug(slug: string): BlogPost | undefined {
+  return getPublishedPosts().find(post => post.slug === slug);
+}
+
+/** Slugs of published posts (generateStaticParams). */
 export function getAllPostSlugs(): string[] {
-  return blogPosts.map((post) => post.slug);
+  return getPublishedPosts().map(post => post.slug);
+}
+
+/** ALL posts (published + scheduled) — /api/posts feed & admin only. */
+export function getAllPosts(): BlogPost[] {
+  return blogPosts;
 }
